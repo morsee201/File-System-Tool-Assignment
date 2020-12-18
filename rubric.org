@@ -1,0 +1,101 @@
+#+STARTUP: showall
+#+TITLE: Program Rubric 005: Ticket Lock
+#+SUBTITLE: CIS 310: Operating Systems
+#+AUTHOR: Brian C. Ladd
+#+DATE: Fall 2017
+
+DUE 20191023:1100
+COMMITTED:
+
+*REASONS TO STOP GRADING*
+- Failure to compile.
+- No =README=
+  - No ID block in =README=
+  - No instructions on compiling and running
+- =.h= / =.cpp= file with no ID block
+*REASONS TO STOP GRADING*
+
+Documentation            /30
+- Adequate comments
+  - Easy to find ID blocks
+    - No names removed from the ID block
+  - Class/Function header comments
+    - Document *intent* - Why would a programmer call it
+    - Parameter types, values, changes documented
+    - Return type, values documented
+  - Sufficient but succinct in-line comments
+    - Let code do most of the explaining
+    - Document (or better, improve) difficult to follow bits
+  - Citations for code from other places
+- Good type, function, and variable names
+  - Descriptive names
+  - Name length directly proportional to size of scope:
+    larger scope -_ longer name
+- Style
+  - Indentation
+    - Use only SPACE characters for indent, not TAB
+    - Consistent indentation that improves readability
+      - Indent between curly braces to show nesting
+  - Curly-brace placement
+    - Opening curly-brace should NEVER start a line
+      - It ends the line with the if/while/for/else on it, doesn't start the next line
+    - Closing curly-brace aligns with the BEGINNING of the if/while/for/else line
+    - else if is on one line
+      - Starts with } (if necessary)
+      - else if (<boolean>) follows
+      - ends with { (if necessary)
+- README
+  - Problem Statement
+  - Testing Criteria
+    - Explain what data was used (include the data in the repo)
+      - With each data set, give the expected output
+        - This can be in an appropriate file to keep README uncluttered
+      - If necessary, explain why that output is expected
+    - If a test takes a long time, indicate that
+  - Compiling and Running Instructions
+    - Include what directory the user should be in for commands
+
+Design                   /30
+- Uses separate compilation units
+  - Separate =.h= (and =.cpp= if necessary) file for each class/subsystem
+  - Uses the =EXECUTABLE_MODULES= and =MODULES= make variables to build the executable
+- Good design practice:
+  MODULES
+  - Modules cohesive at a high level of abstraction.
+    - Classes within the module obviously related
+    - Module well-named and well-documented to make finding the right code easy
+  CLASSES
+  - Classes/structs used to encapsulate (protect) data
+  - Each class has good cohesion
+    - Collects up obviously related functionality
+    - Well-named to document what it does
+    - Limited interface
+  FUNCTIONS
+  - Each function has *exactly one* concern
+    - The function's name reflects exactly what it does
+      - The names of parameters similarly document what the value is for
+    - The function works at a single level of abstraction
+      - Think of a program in layers;
+        high-level functions order the calls to lower-level functions
+      - Functions are the interface across the layers.
+      - Consider a driver: its API is its public functions;
+        its implementation are the private functions that do the work.
+  - Reasonable *error handling*
+    - Separate error /detection/ from error /reporting/
+    - Typically: do *not* print error messages in a processing function
+      - The processing function un-reusable if the UI changes
+- Critical Region Protection
+  - Simple locks can be used to implement more *complicated* locks
+  - A single =TicketLock= is *shared* among all threads
+    - Instance *fields* within a shared *lock* instance are /shared/!
+
+Implementation           /30
+- C++
+  - Never use the =use ...= statement in =.h= files
+- Critical Regions
+  - Runs with default values producing correct answer
+  - Runs with more threads and works
+  - Runs with more loop iterations and works
+
+Aesthetics               5/10
+- Everything is okay (starts at 5/10)

@@ -1,0 +1,119 @@
+#+STARTUP: showall
+#+OPTIONS: toc:nil
+#+TITLE: Program: Fun with Files
+#+SUBTITLE: CIS 310: Operating Systems
+#+AUTHOR: Brian C. Ladd
+#+DATE: Fall 2020
+
+* Learning Outcomes
+- Looking up C/C++ function documentation.
+- Fetching data and metadata from files and file systems in Linux.
+- Using the API for the file system.
+
+* Introduction
+** Commandline tools
+You should run several Linux commandline tools to get a feel for what the tools you build must do. Remember that most Linux commands have =man= pages /and/ many support the =--help= commandline switch.
+The tools you will build mimic the following commands. *Your* versions will support fewer commandline arguments.
+- =stat= :: Given a path name on the commandline, list the /statistics/ of the file.
+  - Useful Functions: =stat()=
+  - Example:
+#+BEGIN_SRC bash
+$ stat .bashrc
+  File: .bashrc
+  Size: 3670      	Blocks: 8          IO Block: 4096   regular file
+Device: 10302h/66306d	Inode: 3670021     Links: 1
+Access: (0644/-rw-r--r--)  Uid: ( 1000/    laddbc)   Gid: ( 1000/    laddbc)
+Access: 2020-11-22 11:44:36.984673058 -0500
+Modify: 2020-10-18 11:33:06.405468500 -0400
+Change: 2020-10-18 11:33:06.405468500 -0400
+ Birth: 2017-05-05 12:17:50.935239611 -0400
+#+END_SRC
+  - Command Line Processing: A path name (file/directory name) is /required/. *No other* parameters need be interpreted.
+  - Errors: Error message and program return code appropriate for file not found: =ENOENT=; =EINVAL= for invalid argument.
+- =ls= :: List entries in the current (default) or named directory. Pay attention to the =-R= commandline switch (recursive listing) as you will be implementing this functionality.
+  - Useful Functions: =stat()=, =opendir()=, =readdir()=, =getcwd()=.
+  - Example:
+#+BEGIN_SRC bash
+$ ls -R pTicketLock/src
+src:
+allModule.mk  locks  os_dependent  tools
+
+src/locks:
+module.mk  ticketLock.cpp  ticketLock.h
+
+src/os_dependent:
+module.mk  SpinLock.h  xchg.h
+
+src/tools:
+executable.mk  ticketLockTest.cpp
+#+END_SRC
+  - Command Line Processing: =-R= is optionally the first commandline parameter. If it is there, list directory contents /recursively/. An optional path name (file/directory name) can also be supplied; if present, that is the root directory to list; default starting directory is the current working directory.
+     If a file name is provided, then just list that one file.
+  - Errors: Error message and program return code appropriate for a bad path name: =ENOENT=; =EINVAL= for invalid argument.
+
+- =tail= :: Print the last few lines of a named file. Note that =tail= does *not* read the whole file from the beginning (in terms of lines in the file, what is the Θ of that implementation?); instead it goes to the end and works backward to find the beginning of the nth to last line and prints them (given a fixed size tail, in terms of file lines, what is Θ?).
+  - Useful Functions: =stat()=, =lseek()=, =open()=, =read()=, =close()=.
+  - Example:
+#+BEGIN_SRC bash
+$ tail Makefile
+
+# mkdir -p permits making a deeper than 1 tree AND remaking an existing
+# directory. So the previous rule runs fine even if this one runs first
+$(BUILDDIRS):
+	@mkdir -p $@
+
+# Rule to clean files.
+.PHONY:	clean
+clean :
+	-rm -rf $(BUILD)
+#+END_SRC
+   - Command Line Processing: A path name (file name) is /required/. *No other* parameters need be interpreted.
+  - Errors: Error message and program return code appropriate for a bad path name: =ENOENT=; =EINVAL= for invalid argument, =EISDIR= if tail is applied to a directory.
+
+* Documentation
+  *Note that these requirements, repeated or not, apply to /all/ programming assignments in CIS 310.*
+** Do not forget the =README.org= or =README.txt= file
+*** The =README= document goes in the root directory of the project (where the =Makefile= lives)
+*** It is in plain text or Org mode formatting
+*** It must contain (at least) the following:
+- Identification Block :: Much as described in the next section, the =README= must identify the programmer (with e-mail address) and the problem being solved. No ID block is the same as no =README=.
+- Problem Restatement :: Restate the problem being solved to make the project self-contained. Restating the problem is also good practice to check that you understand what you are supposed to do.
+- Testing Criteria :: You know by now that "it must be right, it compiles" is a silly statement. So, how do you know that you are done? You must document exactly how you tested your program with
+- Test Input :: Files or descriptions of what to give as input
+- Test Execution :: Commandlines and answers to prompts to execute your program with each set of test data.
+- Expected Output :: How to find the output and what the output is supposed to be. This should refer back to the input data and the assignment to establish that the expected output matches the problem being solved.
+- Compiling and Exectuitg Instructions :: Give clear /commandline specifications/ for compiling and running your program. What folder should the user be in to run the commands? What tool(s) does the process require? What do the commandline arguments /mean/?
+*** The =README= must accompany every program you turn in.
+
+** Do not forget ID blocks in each C++ file *and* =README=
+*** Example header block for a Java/C++ file
+    Taken from Departmental Coding Standards
+ #+BEGIN_SRC C++
+ /**
+  * Gargoyle draws a random ASCII art monster on standard output.
+  *
+  * Gargoyle has all static methods (and no constructor) including
+  * main. It is run with a single integer on the command-line that
+  * is used to randomize the monster that is generated.
+  *
+  * @author Jimmy A. Student
+  * @email studeja199@potsdam.edu
+  * @course CIS 203 Computer Science II
+  * @assignment p004
+  * @due 04/25/2018
+  */
+ #+END_SRC
+
+** Function comments must document *intent*.
+*** Why is this computation broken out into a function?
+*** What does it do?
+**** This is in the language of the /caller/.
+***** A function is the *interface* between two levels of /abstraction/.
+****** The header documentation is written for the /higher level/ of abstraction.
+****** The code (and its included documentation) is for the lower level of abstraction.
+*** What ore the /parameters/?
+**** Document expected range of values, checks done on parameters, etc.
+*** What errors/exceptions can happen?
+**** Document both what exceptions and what they mean (to the /caller/).
+*** What /preconditions/ must pertain for this function to perform correctly?
+*** What /postconditions/ will this function put in place when run?
