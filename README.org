@@ -1,0 +1,85 @@
+#+STARTUP: showall
+#+TITLE: pfileSystem
+#+SUBTITLE: CIS 310: Operating Systems
+#+AUTHOR: Emma Morse
+#+DATE: 12/18/2020
+
+
+**Identification Block
+    @author: Emma Morse
+    @email: morsee201@potsdam.edu
+    @course: CIS 310 Operating Systems
+    @assignment: pfileSystem
+    @due: 12/18/2020
+
+**Problem Restatement
+    Build tools in c/c++ that mimic the commandline tools stat, ls, and tail. These tools will
+    have fewer commandline arguments.
+
+**Testing Criteria
+    For this project to be considered correct, the output of the tools should be identical
+    to the output of the tools they are mimicing.
+**Test Input
+    Stat should be tested with different types of paths such as "test.txt", "foo/testInFoo.txt", and "foo".
+    I tested this with the following inputs.
+
+**Test Execution
+    The general command for testing stat
+    #+BEGIN_SRC bash
+    $ build/statFunction file_path
+    #+END_SRC
+
+    Just a file
+
+    #+BEGIN_SRC bash
+    $ build/statFunction test.txt
+    #+END_SRC
+
+    A longer file path
+
+    #+BEGIN_SRC bash
+    $ build/statFunction foo/test.txt
+    #+END_SRC
+
+    Just a directory
+
+    #+BEGIN_SRC bash
+    $ build/statFunction foo
+    #+END_SRC
+
+
+
+**Expected Output
+
+    Linux stat command ran on test.txt:
+    #+BEGIN_SRC bash
+        File: test.txt
+        Size: 20        	Blocks: 8          IO Block: 4096   regular file
+      Device: fd00h/64768d	Inode: 1465941     Links: 1
+      Access: (0664/-rw-rw-r--)  Uid: ( 1000/    emma)   Gid: ( 1000/    emma)
+      Access: 2020-12-18 04:30:10.780897052 -0500
+      Modify: 2020-12-18 04:30:18.597165092 -0500
+      Change: 2020-12-18 04:30:18.597165092 -0500
+      Birth: -
+
+
+    This should be identical to the output of my tool ran on test.txt. This should be true for all files
+    called with statFunction. This indicates that my implementation is correct for all inputs
+
+**Compiling and Executing Instructions
+    User should be in the root directory of the repository to run.
+
+    To Run:
+
+    Stat:
+    #+BEGIN_SRC bash
+    $ make
+    $ build/statFunction
+    #+END_SRC
+
+    There is one command line parameter, which is the path of the file whose details
+    you want.
+
+    #+BEGIN_SRC bash
+    $ build/ticketLockTest statFunction
+    #+END_SRC

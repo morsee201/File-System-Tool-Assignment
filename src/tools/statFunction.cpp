@@ -1,3 +1,12 @@
+/**
+ *  @author: Emma Morse
+ *  @email: morsee201@potsdam.edu
+ *  @course: CIS 310 Operating Systems
+ *  @assignment: pfileSystem
+ *  @due: 12/18/2020
+ *
+ */
+
 #include <iostream>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -7,6 +16,7 @@
 
 #include <string>
 #include <string.h>
+
 
 /**
  * @brief Prints details about a file
